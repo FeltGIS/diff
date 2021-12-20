@@ -119,6 +119,10 @@ func (c *ChangeValue) Set(value reflect.Value, convertCompatibleTypes bool) {
 
 		if convertCompatibleTypes {
 			if c.target.Kind() == reflect.Ptr && value.Kind() != reflect.Ptr {
+				if !value.IsValid() {
+					c.target.Set(reflect.Zero(c.target.Type()))
+					return
+				}
 				if !value.Type().ConvertibleTo(c.target.Elem().Type()) {
 					c.AddError(fmt.Errorf("Value of type %s is not convertible to %s", value.Type().String(), c.target.Type().String()))
 					c.SetFlag(FlagFailed)

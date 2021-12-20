@@ -333,3 +333,24 @@ func TestPatchPointerConvertTypes(t *testing.T) {
 	assert.False(t, patchLog.HasErrors())
 	assert.Equal(t, 2, *t1.S)
 }
+
+func TestPatchWithoutTargetValue(t *testing.T) {
+	type tps struct {
+		S *int
+	}
+
+	val := 1
+
+	t1 := tps{S: &val}
+	t2 := tps{S: nil}
+
+	changelog, err := diff.Diff(t1, t2)
+	assert.NoError(t, err)
+
+	d, err := diff.NewDiffer(diff.ConvertCompatibleTypes())
+	assert.NoError(t, err)
+
+	patchLog := d.Patch(changelog, &t1)
+	assert.False(t, patchLog.HasErrors())
+	assert.Nil(t, t1.S)
+}
