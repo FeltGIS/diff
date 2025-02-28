@@ -1,4 +1,4 @@
-module github.com/r3labs/diff/v3
+module github.com/FeltGIS/diff/v3
 
 go 1.13
 
